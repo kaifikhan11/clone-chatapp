@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clone What'sApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #contain {
+            position: relative;
+            height: calc(100vh - 20vh); /* Adjust based on nav and footer height */
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column; /* Stack messages vertically */
+            justify-content: flex-end; /* Align messages to the bottom */
+        }
+        .bubble {
+            --r: 1em;  
+            --t: 1.5em;
+            max-width: 300px;
+            padding: 1em;
+            border-inline: var(--t) solid #0000;
+            border-radius: calc(var(--r) + var(--t))/var(--r);
+            mask: 
+                radial-gradient(100% 100% at var(--_p) 0,#0000 99%,#000 102%) 
+                var(--_p) 100%/var(--t) var(--t) no-repeat,
+                linear-gradient(#000 0 0) padding-box;
+            background: linear-gradient(135deg,#6f7272,#01382f) border-box;
+            color: #fff;
+            margin: 10px; /* Add margin for spacing */
+        }
+        .left {
+            --_p: 0;
+            border-bottom-left-radius: 0 0;
+            align-self: flex-start; /* Align to the left */
+        }
+        .right {
+            --_p: 100%;
+            border-bottom-right-radius: 0 0;
+            align-self: flex-end; /* Align to the right */
+        }
+        img {
+            width: 100%; 
+            height: auto; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            z-index: -1;
+        }
+        footer {
+            position: relative;
+            z-index: 1; /* Ensure footer is above the image */
+            display: flex; /* Use flexbox for footer layout */
+            align-items: center; /* Center align items vertically */
+            padding: 0 10px; /* Add some padding */
+        }
+        .send-button {
+            width: 80px; /* Fixed width for the button image */
+            height: 80px; /* Fixed height for the button image */
+            margin-left: 1700px; /* Space between input and button */
+        }
+        .input-field {
+            flex-grow: 1; /* Make the input take available space */
+            max-width: 90%; /* Set a maximum width for the input field */
+            min-width: 250px; /* Set a minimum width for responsiveness */
+        }
+    </style>
+</head>
+<body>
+    <nav class="md:h-[10vh] h-[7vh] w-full text-white flex items-center justify-center text-5xl font-bold bg-[#161615]">
+        <h1 data-mdb-animation="fade-in">Clone What'sApp</h1>
+    </nav>
+    <div id="contain">
+        <img src="https://i.pinimg.com/originals/e8/d9/4e/e8d94e1e8b6b530ad315e9385290141b.jpg" alt="">
+    </div>
+    <footer class="md:h-[10vh] h-[8vh] w-full bg-[#19191a] flex items-center"> 
+        <input class="input-field md:h-[8vh] h-[6vh] px-[2vw] bg-[#08141b] text-white rounded-3xl mt-2" id="input" type="text" placeholder="Enter your message">
+        <button onclick="sendMessage()">
+            <img class="send-button" src="https://play-lh.googleusercontent.com/82ujadNAP_q-3sdDjU4ePccIwahqe6YP6FbUG8znaQezYdccgBo5q2PUCHtPXLomX3Q" alt="Send">
+        </button>
+    </footer>
+
+    <script>
+        function sendMessage() {
+            const inputField = document.getElementById('input');
+            const messageText = inputField.value.trim();
+
+            if (messageText) {
+                appendMessage(messageText, 'right');
+                
+                setTimeout(() => {
+                    autoReply(messageText);
+                }, 1000); 
+                inputField.value = ''; 
+            }
+        }
+
+        function appendMessage(text, alignment) {
+            const messageBubble = document.createElement('div');
+            messageBubble.className = `bubble ${alignment}`;
+            messageBubble.textContent = text;
+
+            const container = document.getElementById('contain');
+            container.appendChild(messageBubble);
+            container.scrollTop = container.scrollHeight; 
+        }
+
+        function autoReply(userMessage) {
+            const replies = [
+                "That's interesting!",
+                "Can you tell me more?",
+                "I'm not sure I understand.",
+                "How does that make you feel?",
+                "Let me think about that.",
+                "What do you mean by that?",
+            ];
+            const replyText = replies[Math.floor(Math.random() * replies.length)];
+            appendMessage(replyText, 'left');
+        }
+    </script>
+</body>
+</html>
